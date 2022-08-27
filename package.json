@@ -1,0 +1,19 @@
+{
+  "name": "sesame_api",
+  "version": "1.0.0",
+  "description": "api backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "test.js",
+    "app": "app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "googleapis": "^107.0.0",
+    "qrcode": "^1.5.1",
+    "stripe": "^10.6.0"
+  }
+}

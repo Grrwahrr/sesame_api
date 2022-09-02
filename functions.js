@@ -39,7 +39,6 @@ const createTicketPdf = async (ticket) => {
             event: config.app.event,
             ticket: ticket
         },
-        // path: "output.pdf",
         type: "buffer",
     };
 
@@ -67,8 +66,7 @@ const createTicketAndSendByMail = async (ticketData) => {
         return {success: false, error: "Could not create PDF in createTicketAndSendByMail()"};
     }
 
-    // DEBUG
-    console.log("DEBUG PDF: ", pdf);
+    // DEBUG store pdf
     fs.writeFileSync("output.pdf", pdf, "utf8");
 
     // Send mail, GMAIL API
@@ -86,7 +84,7 @@ const createTicketAndSendByMail = async (ticketData) => {
     return {success: true};
 }
 
-const logCustomerPurchase = (paymentDetails, ticketData) => {
+const logCustomerPurchase = async (paymentDetails, ticketData) => {
     // Log payment details, SHEETS API
     // https://developers.google.com/sheets/api/quickstart/nodejs
 
@@ -117,10 +115,9 @@ const issueOnChainTicketForEventPass = () => {
     // TODO later
 }
 
-const completePurchase = async (src, paymentDetails, payload) => {
+const completePurchase = async (src, paymentDetails) => {
     // Debug
-    console.log("DEBUG completePurchase(): ", src, paymentDetails);
-    console.log("PAYLOAD completePurchase(): ", payload);
+    // console.log("DEBUG completePurchase(): ", src, paymentDetails);
 
     // Amount total
     if ( paymentDetails.amount_total !== config.stripe.productPrice ) {
@@ -154,7 +151,7 @@ const completePurchase = async (src, paymentDetails, payload) => {
     ticketData = issueOnChainTicket(ticketData);
 
     // Log payment details
-    logCustomerPurchase(paymentDetails, ticketData);
+    await logCustomerPurchase(paymentDetails, ticketData);
 
     // Mail ticket to customer
     await createTicketAndSendByMail(ticketData);

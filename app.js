@@ -97,13 +97,13 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
             }
 
             // Payment is complete
-            completePurchase('checkout.session.completed', session, event).then( () => {
+            completePurchase('checkout.session.completed', session).then( () => {
                 response.status(200);
             });
             break;
         }
         case 'checkout.session.async_payment_succeeded': {
-            completePurchase('checkout.session.async_payment_succeeded', session, event).then( () => {
+            completePurchase('checkout.session.async_payment_succeeded', session).then( () => {
                 response.status(200);
             });
             break;

@@ -18,7 +18,7 @@
   },
   "stripe": {
     "productName": "UFFB Ticket",
-    "productPrice": 100,
+    "productPrice": 1000,
     "urlSuccess": "http://127.0.0.1:3001/testSuccess",
     "urlError": "http://127.0.0.1:3001/testError",
     "secretKey": "sk_test_51LbMTyFItYEyplx1HJpD353DXg1sdSHkQufVSa3RnYn9CXTjrxHhFi8ffdke556eS5nNgeube2tSyRPj0NuCasCE00y4GOYMV3",

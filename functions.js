@@ -69,6 +69,7 @@ const createTicketAndSendByMail = async (ticketData) => {
 
     // DEBUG
     console.log("DEBUG PDF: ", pdf);
+    fs.writeFileSync("output.pdf", pdf, "utf8");
 
     // Send mail, GMAIL API
     const { client_secret, client_id, redirect_uris } = config.gmail;
@@ -116,16 +117,34 @@ const issueOnChainTicketForEventPass = () => {
     // TODO later
 }
 
-const completePurchase = async (src, paymentDetails) => {
+const completePurchase = async (src, paymentDetails, payload) => {
     // Debug
     console.log("DEBUG completePurchase(): ", src, paymentDetails);
+    console.log("PAYLOAD completePurchase(): ", payload);
+
+    // Amount total
+    if ( paymentDetails.amount_total !== config.stripe.productPrice ) {
+        console.log("ERROR completePurchase(): Price is not as expected!");
+        return;
+    }
+
+    if ( !paymentDetails.customer_details.email || paymentDetails.customer_details.email.length <= 1 ) {
+        console.log("ERROR completePurchase(): No email found: ", paymentDetails);
+        return;
+    }
+
+    if ( !paymentDetails.customer_details.name || paymentDetails.customer_details.name.length <= 1 ) {
+        console.log("ERROR completePurchase(): No name found: ", paymentDetails);
+        return;
+    }
+
 
     // Get relevant data from paymentDetails and config
     let ticketData = {
-        email: "durgus@pm.me",
-        name: 'First Last',
+        email: paymentDetails.customer_details.email,
+        name: paymentDetails.customer_details.name,
         seatId: -1,
-        seatName: "TODO",
+        seatName: paymentDetails.metadata.seatName,
         seed: crypto.randomBytes(6).toString("hex"),
         eventId: config.app.event.pubKey,
         onChainSuccess: false,

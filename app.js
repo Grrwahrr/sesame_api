@@ -11,7 +11,7 @@ const app = express();
 /* TEST FUNCTIONALITY FOR SANDBOX */
 const sampleData = {
     email: "durgus@pm.me",
-    name: 'Some INCREDIBLY LONG EPIC LONG REDICILOUS Name',
+    name: 'Balthasar VeryLongName',
     seatId: 1,
     seatName: "C-09",
     seed: crypto.randomBytes(6).toString("hex"),
@@ -48,14 +48,14 @@ app.post('/stripeCheckoutSession', async (req, res) => {
                 price_data: {
                     currency: 'eur',
                     product_data: {
-                        name: config.stripe.productName,
-                        metadata: {"seatName": "none_todo"},
+                        name: config.stripe.productName
                     },
-                    unit_amount: config.stripe.productPrice,
+                    unit_amount: config.stripe.productPrice
                 },
-                quantity: 1,
+                quantity: 1
             },
         ],
+        metadata: {"seatName": "na"},
         mode: 'payment',
         success_url: config.stripe.urlSuccess,
         cancel_url: config.stripe.urlError,
@@ -97,13 +97,13 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
             }
 
             // Payment is complete
-            completePurchase('checkout.session.completed', session).then( () => {
+            completePurchase('checkout.session.completed', session, event).then( () => {
                 response.status(200);
             });
             break;
         }
         case 'checkout.session.async_payment_succeeded': {
-            completePurchase('checkout.session.async_payment_succeeded', session).then( () => {
+            completePurchase('checkout.session.async_payment_succeeded', session, event).then( () => {
                 response.status(200);
             });
             break;

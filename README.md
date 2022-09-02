@@ -1,15 +1,28 @@
-
+Run using
 node app
 
 
+
+
+---
+Stripe webhook
+https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local
 https://stripe.com/docs/stripe-cli
 
 ./stripe login
 
 ./stripe listen --forward-to localhost:3001/stripeCallback
 
+---
+Stripe payment / item  data
+https://stripe.com/docs/api/products/object
 
 ---
+Stripe branding
+https://dashboard.stripe.com/settings/branding
+
+---
+https://stripe.com/docs/checkout/quickstart?lang=node
 
 - I need 3 plain HTML sites
     - with the checkout button to buy the ticket

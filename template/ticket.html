@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Ticket</title>
+    <style>
+        .ticket{border:1px solid #ccc;border-radius:10px;height:230px;width:525px}
+        .event{display:inline-block;vertical-align:top;width:310px;
+            padding:25px 0px 15px 15px;
+            border-top-left-radius:10px;border-bottom-left-radius:10px;background-color:#eee;height:190px}
+        .details{display:inline-block;vertical-align:top;width:170px;
+            padding:15px 15px 15px 5px;
+        }
+        .label{font-weight:900}
+        .value{color:blue;padding-bottom:15px}
+        .center{text-align:center}
+        .code{font-size:12px;padding-bottom:10px}
+        .value-compact{font-size:14px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <div class="event">
+            <div class="label">{{event.labels.title}}</div>
+            <div class="value">{{event.title}}</div>
+
+            <div class="label">{{event.labels.location}}</div>
+            <div class="value">{{event.location}}</div>
+
+            <div class="label">{{event.labels.dateTime}}</div>
+            <div class="value">{{event.dateTime}}</div>
+        </div>
+
+        <div class="details">
+            <div class="center">
+                <img width="128" height="128" class="qrcode" src="{{ticket.qrCode}}" />
+            </div>
+            <div class="center code">#{{ticket.seatId}}-{{ticket.seed}}</div>
+            <div>
+                <div class="value-compact">{{ticket.email}}</div>
+                <div class="value-compact">{{ticket.name}}</div>
+                <div class="value-compact">{{ticket.seatName}}</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,119 +1,47 @@
-const http = require('node:http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const qrCode = require('qrcode')
-const {google} = require('googleapis');
 const config = require('./config.json');
-
-// Stripe
 const stripe = require("stripe")(config.stripe.secretKey);
+const {completePurchase, testSendMail} = require("./functions");
 
 const app = express();
 
 
-
+/* TEST FUNCTIONALITY FOR SANDBOX */
 const sampleData = {
     email: "durgus@pm.me",
-    name: 'Some Name',
+    name: 'Some INCREDIBLY LONG EPIC LONG REDICILOUS Name',
     seatId: 1,
     seatName: "C-09",
-    seed: crypto.randomUUID(),
+    seed: crypto.randomBytes(6).toString("hex"),
     eventId: "2WEXvXAiBVEcAD2gUAaurKpBvhpririWSEGZmZkdexzg",
 };
-
-
-const createQrCode = async (data) => {
-    let encoded = Buffer.from(JSON.stringify(
-        {ns: data.name, si: data.seatId, sn: data.seatName, se: data.seed, ev: data.eventId}
-    )).toString('base64');
-
-    // decode: let actual = JSON.parse(Buffer.from(encoded, 'base64').toString());
-
-    try {
-        return await qrCode.toDataURL(encoded);
-    } catch (err) {
-        return console.error(err);
-    }
-}
-
-const createTicketPdf = () => {
-    // Use some template file?
-
-    // Slap in the QR code PNG
-}
-
-const sendTicketMail = async (data) => {
-
-    // Create QR
-    let qrCode = await createQrCode(data);
-    console.log("SEED: ", data.seed);
-    console.log("QR CODE PNG: ", qrCode);
-
-    // Attach to PDF
-    let pdf = createTicketPdf();
-
-    // Send mail, GMAIL API
-    const { client_secret, client_id, redirect_uris } = config.gmail;
-    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-
-    const url = oAuth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: ['https://www.googleapis.com/auth/gmail.send'],
-    });
-
-    // https://www.labnol.org/google-api-service-account-220405
-}
-
-const logPayment = () => {
-    // Log payment details, SHEETS API
-    // https://developers.google.com/sheets/api/quickstart/nodejs
-
-    let url = "POST https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1!A1:E1:append?valueInputOption=USER_ENTERED";
-    let callData = {
-        "range": "Sheet1!A1:E1",
-        "majorDimension": "ROWS",
-        "values": [
-            ["Door", "$15", "2", "3/15/2016"],
-        ],
-    };
-}
-
-const issueOnChainTicket = () => {
-
-}
-
-const issueOnChainTicketForEventPass = () => {
-
-}
-
-const completePurchase = (src, mail, name, seatName) => {
-    // Debug
-    console.log("Complete purchase: ", src, mail, name, seatName);
-
-    // Generate some random data
-    const rand = crypto.randomBytes(8).toString("hex");
-
-    // Log payment details
-
-    // Issue on chain ticket
-
-    // Mail ticket to customer
-}
+app.get('/testShop', async (req, res) => {
+    res.sendFile('/Users/grrwahrr/IdeaProjects/sesame_api/template/shop.html');
+});
+app.get('/testSuccess', async (req, res) => {
+    res.sendFile('/Users/grrwahrr/IdeaProjects/sesame_api/template/success.html');
+});
+app.get('/testSuccess', async (req, res) => {
+    res.sendFile('/Users/grrwahrr/IdeaProjects/sesame_api/template/error.html');
+});
+/* TEST FUNCTIONALITY FOR SANDBOX */
 
 
 
+
+
+
+//
 app.get('/', (req, res) => {
-    sendTicketMail(sampleData).then(r => {
-        console.log("THEN ", r);
+    testSendMail(sampleData);
 
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ result: "TODO" }));
-    });
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ result: "TODO" }));
 });
 
-app.get('/stripeCheckoutSession', async (req, res) => {
+app.post('/stripeCheckoutSession', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
@@ -121,6 +49,7 @@ app.get('/stripeCheckoutSession', async (req, res) => {
                     currency: 'eur',
                     product_data: {
                         name: config.stripe.productName,
+                        metadata: {"seatName": "none_todo"},
                     },
                     unit_amount: config.stripe.productPrice,
                 },
@@ -153,8 +82,10 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
     // Fetch session data
     const session = event.data.object;
 
-    if ( !event.livemode ) {
-        console.log("TEST MODE");
+    // Check if the app is in sandbox mode
+    if ( config.app.mode === "sandbox" && event.livemode ) {
+        console.log("App is in sandbox mode");
+        return response.status(400).send("Webhook Error: app is in sandbox mode, request has live data.");
     }
 
     switch (event.type) {
@@ -166,27 +97,24 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
             }
 
             // Payment is complete
-            completePurchase(1,"mail", "name", "seatName");
+            completePurchase('checkout.session.completed', session).then( () => {
+                response.status(200);
+            });
             break;
         }
         case 'checkout.session.async_payment_succeeded': {
-            completePurchase(2, "mail", "name", "seatName");
+            completePurchase('checkout.session.async_payment_succeeded', session).then( () => {
+                response.status(200);
+            });
             break;
         }
         case 'checkout.session.async_payment_failed': {
             // TODO Handle this? Message some one?
-            break;
-        }
-        case 'charge.succeeded': {
-            completePurchase(3, "mail", "name", "seatName");
+            response.status(200);
             break;
         }
     }
-
-    response.status(200);
 });
-
-
 
 
 app.listen(config.app.port, () => console.log("Example app listening on http://"+ config.app.host + ":" + config.app.port +"/ "));

@@ -134,17 +134,17 @@ const completePurchase = async (src, paymentDetails) => {
     ticketData = issueOnChainTicket(ticketData);
     //TODO check result
 
-    // Log payment details
-    let resLog = await logCustomerPurchase(paymentDetails.id, paymentDetails.payment_intent, ticketData.email, ticketData.name, ticketData.seatId, ticketData.seatName, ticketData.seed);
-
-    if ( !resLog.success ) {
-        //TODO handle error
-    }
-
     // Mail ticket to customer
     let resMail = await createTicketAndSendByMail(ticketData);
 
     if ( !resMail.success ) {
+        //TODO handle error
+    }
+
+    // Log payment details
+    let resLog = await logCustomerPurchase(paymentDetails.id, paymentDetails.payment_intent, ticketData.email, ticketData.name, ticketData.seatId, ticketData.seatName, ticketData.seed, resMail.id);
+
+    if ( !resLog.success ) {
         //TODO handle error
     }
 }

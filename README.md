@@ -10,6 +10,7 @@ This should work for multiple parallel events
 
 Need NFT minting functionality for users
 - LATER
+- https://stackoverflow.com/questions/72827382/anchor-how-to-ask-the-nodejs-backend-to-co-sign-a-transaction-from-the-frontend
 
 Add Event Pass functionality
 - LATER

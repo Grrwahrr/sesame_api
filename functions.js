@@ -67,13 +67,11 @@ const createTicketAndSendByMail = async (ticketData) => {
         return {success: false, error: "Could not create PDF in createTicketAndSendByMail()"};
     }
 
-    // DEBUG store pdf
-    fs.writeFileSync("output.pdf", pdf, "utf8");
+    // DEBUG store copy of pdf
+    // fs.writeFileSync(ticketData.seed + ".pdf", pdf, "utf8");
 
-    // Send the
-    await sendEmail("durgus@pm.me", "Ticket for the UFFB Event", "Your ticket is attached", "<strong>Your ticket is attached!</strong>", "ticket.pdf", pdf);
-
-    return {success: true};
+    // Send the email containing the ticket pdf
+    return await sendEmail(ticketData.email, config.app.mail.subject, config.app.mail.contentPlain, config.app.mail.contentHtml, config.app.mail.fileName, pdf);
 }
 
 // Log payment details using SHEETS API
@@ -155,8 +153,6 @@ const completePurchase = async (src, paymentDetails) => {
 const testSendMail = (sampleData) => {
     createTicketAndSendByMail(sampleData).then(r => {
         console.log("DEBUG testSendMail():", r);
-
-
     });
 }
 

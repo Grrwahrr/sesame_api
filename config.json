@@ -14,6 +14,12 @@
       },
       "pubKey": "2WEXvXAiBVEcAD2gUAaurKpBvhpririWSEGZmZkdexzg",
       "authorityTicketIssuer": "SECRET_KEY"
+    },
+    "mail": {
+      "subject": "Ticket for the UFFB Event",
+      "contentPlain": "Your ticket is attached",
+      "contentHtml": "<strong>Your ticket is attached!</strong>",
+      "fileName": "ticket.pdf"
     }
   },
   "stripe": {

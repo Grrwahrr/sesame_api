@@ -53,8 +53,6 @@ async function saveCredentials(client) {
 
 
 const sendEmail = async (to, subject, content, contentHTML, fileName, fileContent) => {
-    const auth = await authorize();
-
     let mail = new MailComposer(
         {
             to: to,
@@ -71,33 +69,39 @@ const sendEmail = async (to, subject, content, contentHTML, fileName, fileConten
             ]
         });
 
-    mail.compile().build( (error, msg) => {
-        if (error) {
-            console.log('ERROR: mail.compile() failed: ' + error);
-            return false;
-        }
-
+    try {
+        // Create and encode message
+        let msg = await mail.compile().build();
         const encodedMessage = Buffer.from(msg)
             .toString('base64')
             .replace(/\+/g, '-')
             .replace(/\//g, '_')
             .replace(/=+$/, '');
 
+        // Send using GMAIL API
+        const auth = await authorize();
         const gmail = google.gmail({version: 'v1', auth});
-        gmail.users.messages.send({
+        let result = await gmail.users.messages.send({
             userId: 'me',
             resource: {
                 raw: encodedMessage,
             }
-        }, (err, result) => {
-            if (err) {
-                console.log('ERROR: gmail api: ' + err);
-                return false;
-            }
-
-            console.log("DEBUG: send mail: ", result.data);
         });
-    })
+
+        if ( result.status === 200 ) {
+            return {success: true, id: result.data.id};
+        }
+
+        // DEBUG result.headers
+        console.log("DEBUG: send mail error?: ", result);
+
+        return {success: false, data: result.data, status: result.status};
+    } catch (e) {
+        // DEBUG
+        console.log("ERROR: sendEmail(): ", e);
+
+        return {success: false, error: e};
+    }
 }
 
 

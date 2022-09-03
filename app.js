@@ -37,9 +37,8 @@ app.get('/testSuccess', async (req, res) => {
 //
 app.get('/', (req, res) => {
     testSendMail(sampleData);
-
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ result: "TODO" }));
+    res.end(JSON.stringify({ testSendMail: "Some JSON" }));
 });
 
 app.get('/connectGoogle', (req, res) => {

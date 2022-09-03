@@ -89,25 +89,57 @@ const sendEmail = async (to, subject, content, contentHTML, fileName, fileConten
         });
 
         if ( result.status === 200 ) {
-            return {success: true, id: result.data.id};
+            return { success: true, id: result.data.id };
         }
 
         // DEBUG result.headers
-        console.log("DEBUG: send mail error?: ", result);
+        console.log("DEBUG: sendEmail(): ", result);
 
-        return {success: false, data: result.data, status: result.status};
+        return { success: false, error: result.statusText, data: result.data };
     } catch (e) {
         // DEBUG
         console.log("ERROR: sendEmail(): ", e);
 
-        return {success: false, error: e};
+        return { success: false, error: e };
     }
 }
 
+const appendToSheet = async (sheetId, sheetRange, values) => {
+    const auth = await authorize();
+    const sheets = google.sheets({version: 'v4', auth});
+
+    try {
+        const res = await sheets.spreadsheets.values.append({
+            range: sheetRange,
+            spreadsheetId: sheetId,
+            valueInputOption: "USER_ENTERED",
+            requestBody: {
+                majorDimension: "ROWS",
+                range: sheetRange,
+                values: values,
+            }
+        });
+
+        if ( res.status === 200 ) {
+            return { success: true };
+        }
+
+        // DEBUG
+        console.log("DEBUG: appendToSheet(): ", res);
+
+        return { success: false, error: res.statusText, data: res.data };
+    }
+    catch (e) {
+        // DEBUG
+        console.log("ERROR: appendToSheet(): ", e);
+
+        return { success: false, error: e };
+    }
+}
 
 
 const connectGoogle = async () => {
     await authorize();
 }
 
-module.exports = { connectGoogle, sendEmail };
+module.exports = { connectGoogle, sendEmail, appendToSheet };

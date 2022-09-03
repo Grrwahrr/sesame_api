@@ -4,7 +4,7 @@ const qrCode = require("qrcode");
 const pdf = require("pdf-creator-node");
 const config = require("./config.json");
 
-const {sendEmail} = require("./google");
+const {sendEmail, appendToSheet} = require("./google");
 
 const createQrCode = async (ticketData) => {
     let encoded = Buffer.from(JSON.stringify(
@@ -75,22 +75,12 @@ const createTicketAndSendByMail = async (ticketData) => {
 }
 
 // Log payment details using SHEETS API
-const logCustomerPurchase = async (payId, payIntent, email, name, seatId, seatName, seed) => {
-    // Current time
+const logCustomerPurchase = async (payId, payIntent, email, name, seatId, seatName, seed, gmailId) => {
     const dateTime = new Date().toISOString();
 
-
-    let url = "POST https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1!A1:I1:append?valueInputOption=USER_ENTERED";
-    let callData = {
-        "range": "Sheet1!A1:I1",
-        "majorDimension": "ROWS",
-        "values": [
-            [dateTime, payId, payIntent, email, name, seatId, seatName, seed],
-        ],
-    };
-
-    // TODO
-    // https://developers.google.com/sheets/api/quickstart/nodejs
+    return appendToSheet(config.app.salesLog.sheetId, config.app.salesLog.sheetRange, [
+        [dateTime, payId, payIntent, email, name, seatId, seatName, seed, gmailId],
+    ]);
 }
 
 const issueOnChainTicket = (ticketData) => {
@@ -105,7 +95,7 @@ const issueOnChainTicket = (ticketData) => {
 }
 
 const issueOnChainTicketForEventPass = () => {
-    // TODO later
+    // TODO EVENT_PASS LATER
 }
 
 const completePurchase = async (src, paymentDetails) => {
@@ -142,18 +132,31 @@ const completePurchase = async (src, paymentDetails) => {
 
     // Attempt to issue the on chain ticket
     ticketData = issueOnChainTicket(ticketData);
+    //TODO check result
 
     // Log payment details
-    await logCustomerPurchase(paymentDetails.id, paymentDetails.payment_intent, ticketData.email, ticketData.name, ticketData.seatId, ticketData.seatName, ticketData.seed);
+    let resLog = await logCustomerPurchase(paymentDetails.id, paymentDetails.payment_intent, ticketData.email, ticketData.name, ticketData.seatId, ticketData.seatName, ticketData.seed);
+
+    if ( !resLog.success ) {
+        //TODO handle error
+    }
 
     // Mail ticket to customer
-    await createTicketAndSendByMail(ticketData);
+    let resMail = await createTicketAndSendByMail(ticketData);
+
+    if ( !resMail.success ) {
+        //TODO handle error
+    }
 }
 
-const testSendMail = (sampleData) => {
-    createTicketAndSendByMail(sampleData).then(r => {
-        console.log("DEBUG testSendMail():", r);
+const testSomething = (sampleData) => {
+    // createTicketAndSendByMail(sampleData).then(r => {
+    //     console.log("DEBUG testSendMail():", r);
+    // });
+
+    logCustomerPurchase("2payId", "3payIntent", "4email", "name", "seatId", "seatName", "seed", "gmailId").then( r => {
+        console.log("DEBUG TEST logCustomerPurchase(): ", r);
     });
 }
 
-module.exports = { testSendMail, completePurchase };
+module.exports = { testSomething, completePurchase };

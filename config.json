@@ -20,6 +20,10 @@
       "contentPlain": "Your ticket is attached",
       "contentHtml": "<strong>Your ticket is attached!</strong>",
       "fileName": "ticket.pdf"
+    },
+    "salesLog": {
+      "sheetId": "1xAqBHJ_zGPucKUS9Kwm_5KD30faHHPBLbFSUbweCtX0",
+      "sheetRange": "Sheet1!A1:J1"
     }
   },
   "stripe": {

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const config = require('./config.json');
 const stripe = require("stripe")(config.stripe.secretKey);
-const {completePurchase, testSendMail} = require("./functions");
+const {completePurchase, testSomething} = require("./functions");
 const {connectGoogle} = require("./google");
 
 const app = express();
@@ -36,7 +36,7 @@ app.get('/testSuccess', async (req, res) => {
 
 //
 app.get('/', (req, res) => {
-    testSendMail(sampleData);
+    testSomething(sampleData);
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ testSendMail: "Some JSON" }));
 });

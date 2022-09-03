@@ -1,23 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const crypto = require('crypto');
 const config = require('./config.json');
 const stripe = require("stripe")(config.stripe.secretKey);
-const {completePurchase, testSomething} = require("./functions");
-const {connectGoogle} = require("./google");
+const {completePurchase, testSomething} = require("./lib/functions");
+const {connectGoogle} = require("./lib/google");
+const {testChainSomething} = require("./lib/solana");
 
 const app = express();
 
 
 /* TEST FUNCTIONALITY FOR SANDBOX */
-const sampleData = {
-    email: "durgus@pm.me",
-    name: 'Balthasar VeryLongName',
-    seatId: 1,
-    seatName: "C-09",
-    seed: crypto.randomBytes(6).toString("hex"),
-    eventId: "2WEXvXAiBVEcAD2gUAaurKpBvhpririWSEGZmZkdexzg",
-};
 app.get('/testShop', async (req, res) => {
     res.sendFile('/Users/grrwahrr/IdeaProjects/sesame_api/template/shop.html');
 });
@@ -29,18 +21,19 @@ app.get('/testSuccess', async (req, res) => {
 });
 /* TEST FUNCTIONALITY FOR SANDBOX */
 
-
-
-
-
-
-//
+// Testing Handler
 app.get('/', (req, res) => {
-    testSomething(sampleData);
+    // testSomething(sampleData);
+    testChainSomething();
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ testSendMail: "Some JSON" }));
 });
+/* TEST FUNCTIONALITY FOR SANDBOX */
 
+
+/**
+ * Set up the google.token.json - requires the google.credentials.json file
+ */
 app.get('/connectGoogle', (req, res) => {
     connectGoogle().then(r => {
         res.setHeader('Content-Type', 'application/json');
@@ -48,6 +41,9 @@ app.get('/connectGoogle', (req, res) => {
     });
 });
 
+/**
+ * Creates a stripe check out session
+ */
 app.post('/stripeCheckoutSession', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         line_items: [
@@ -71,6 +67,9 @@ app.post('/stripeCheckoutSession', async (req, res) => {
     res.redirect(303, session.url);
 });
 
+/**
+ * Stripe callback for payment processing
+ */
 app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request, response) => {
     const payload = request.body;
     const sig = request.headers['stripe-signature'];
@@ -124,37 +123,5 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
 });
 
 
+// Start listening on configured port
 app.listen(config.app.port, () => console.log("Example app listening on http://"+ config.app.host + ":" + config.app.port +"/ "));
-
-
-
-// https://www.npmjs.com/package/qrcode
-
-/*
-Need a config for necessary keys
-
-
-ENDPOINTS
-
-    SALE completed
-        issue on chain
-            ticket
-            event pass
-
-        create the QR
-        put it into some PDF
-
-        GMAIL API to send mail
-
-        SHEETS API to log sale
-
-    REDEEM EVENT PASS
-        issue on chain ticket based on pass
-
-        - rest as above -
-
-    ADMIN
-        refunds
-
-        create a manual ticket
- */

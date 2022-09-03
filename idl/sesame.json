@@ -1,0 +1,1043 @@
+{
+  "version": "0.1.0",
+  "name": "sesame",
+  "instructions": [
+    {
+      "name": "createOrganizer",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "organizer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "createEvent",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "donateTo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "organizer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityIssuer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityDelete",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityCheckIn",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "event",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        },
+        {
+          "name": "ticketsLimit",
+          "type": "u16"
+        },
+        {
+          "name": "timestamp",
+          "type": "u64"
+        },
+        {
+          "name": "locationType",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        },
+        {
+          "name": "imageUrl",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ticketIssue",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "event",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticketOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "ticketDelete",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "ticketOwner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "event",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "ticketOffset",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "ticketCheckIn",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "ticketOwner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "event",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "ticketOffset",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "ticketMint",
+      "accounts": [
+        {
+          "name": "nftOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "ticketOwner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "event",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "ticketOffset",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "updateOrganizer",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "organizer",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updateEvent",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "event",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityIssuer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityDelete",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ticketAuthorityCheckIn",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "eventNum",
+          "type": "u32"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        },
+        {
+          "name": "ticketsLimit",
+          "type": "u16"
+        },
+        {
+          "name": "timestamp",
+          "type": "u64"
+        },
+        {
+          "name": "locationType",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        },
+        {
+          "name": "imageUrl",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "createEventPass",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "organizer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "passAuthorityIssuer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "passAuthorityDelete",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "eventPass",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        },
+        {
+          "name": "imageUrl",
+          "type": "string"
+        },
+        {
+          "name": "limitTickets",
+          "type": "u16"
+        },
+        {
+          "name": "limitHolders",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "eventPassAddEvent",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "eventPass",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "event",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassValidEvent",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "eventPassHolderCreate",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "eventPass",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "ticketIssueForEventPass",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "eventPass",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassValidEvent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventPassOwner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "eventPassHolderTicket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "event",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ticketOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "eventOffset",
+          "type": "u16"
+        },
+        {
+          "name": "holderOffset",
+          "type": "u16"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "EventPassHolderTicket",
+      "type": {
+        "kind": "struct",
+        "fields": []
+      }
+    },
+    {
+      "name": "EventPassHolder",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketsCreated",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventPassValidEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventPass",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "passAuthorityIssuer",
+            "type": "publicKey"
+          },
+          {
+            "name": "passAuthorityDelete",
+            "type": "publicKey"
+          },
+          {
+            "name": "limitTickets",
+            "type": "u16"
+          },
+          {
+            "name": "counterEvents",
+            "type": "u16"
+          },
+          {
+            "name": "counterHolders",
+            "type": "u16"
+          },
+          {
+            "name": "limitHolders",
+            "type": "u16"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "name": "artwork",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Event",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketAuthorityIssuer",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketAuthorityDelete",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketAuthorityCheckIn",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketsLimit",
+            "type": "u16"
+          },
+          {
+            "name": "ticketsIssued",
+            "type": "u16"
+          },
+          {
+            "name": "ticketsDeleted",
+            "type": "u16"
+          },
+          {
+            "name": "timestamp",
+            "type": "u64"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "name": "locationType",
+            "type": {
+              "defined": "LocationType"
+            }
+          },
+          {
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "name": "artwork",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Organizer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "counterEvents",
+            "type": "u32"
+          },
+          {
+            "name": "counterPasses",
+            "type": "u32"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "website",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ticket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "state",
+            "type": {
+              "defined": "TicketState"
+            }
+          },
+          {
+            "name": "owner",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "LocationType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Txt"
+          },
+          {
+            "name": "Gps"
+          },
+          {
+            "name": "Url"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Initial"
+          },
+          {
+            "name": "CheckedIn"
+          },
+          {
+            "name": "Minted"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "EventPassCreated",
+      "fields": [
+        {
+          "name": "eventPass",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "EventCreated",
+      "fields": [
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "OrganizerCreated",
+      "fields": [
+        {
+          "name": "organizer",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "EventPassEventAdded",
+      "fields": [
+        {
+          "name": "eventPass",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "EventPassHolderCreated",
+      "fields": [
+        {
+          "name": "eventPass",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "eventPassHolder",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "TicketCheckedIn",
+      "fields": [
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticket",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticketOffset",
+          "type": "u16",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "TicketDeleted",
+      "fields": [
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticket",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticketOffset",
+          "type": "u16",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "TicketIssuedForEventPass",
+      "fields": [
+        {
+          "name": "eventPass",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "eventPassHolder",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticket",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "TicketIssued",
+      "fields": [
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticket",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "TicketNFTMinted",
+      "fields": [
+        {
+          "name": "event",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticket",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "ticketOffset",
+          "type": "u16",
+          "index": false
+        },
+        {
+          "name": "nftAccount",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "OverflowError",
+      "msg": "Overflow Error"
+    },
+    {
+      "code": 6001,
+      "name": "NotAuthorized",
+      "msg": "Not authorized to perform this action"
+    },
+    {
+      "code": 6002,
+      "name": "NoMoreTicketsLeft",
+      "msg": "No more tickets may be issued"
+    },
+    {
+      "code": 6003,
+      "name": "TicketAlreadyCheckedIn",
+      "msg": "Ticket has already checked in"
+    },
+    {
+      "code": 6004,
+      "name": "NoTicketsLeft",
+      "msg": "There are no more tickets left"
+    },
+    {
+      "code": 6005,
+      "name": "TicketWasNotCheckedIn",
+      "msg": "Can not mint NFT for a ticket that was not checked in"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidTicketAuthorityIssuer",
+      "msg": "The event creator must not be the ticket issue authority"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidTicketAuthorityCheckIn",
+      "msg": "The event creator must not be the ticket check in authority"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidTicketAuthorityDelete",
+      "msg": "The event creator must not be the ticket delete authority"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidPassAuthorityIssuer",
+      "msg": "The event pass creator must not be the pass issue authority"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidPassAuthorityDelete",
+      "msg": "The event pass creator must not be the pass delete authority"
+    },
+    {
+      "code": 6011,
+      "name": "NoMoreTicketsLeftInEventPass",
+      "msg": "This event pass can not issue any more tickets"
+    },
+    {
+      "code": 6012,
+      "name": "LimitOfEventPassHoldersReached",
+      "msg": "There are no more passes that can be issued"
+    }
+  ],
+  "metadata": {
+    "address": "2GTUkXFnABGVHFMqT1tVofBLPrBTAxzjb4Z2rpeMGsJG"
+  }
+}

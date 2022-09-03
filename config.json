@@ -23,10 +23,5 @@
     "urlError": "http://127.0.0.1:3001/testError",
     "secretKey": "sk_test_51LbMTyFItYEyplx1HJpD353DXg1sdSHkQufVSa3RnYn9CXTjrxHhFi8ffdke556eS5nNgeube2tSyRPj0NuCasCE00y4GOYMV3",
     "endpointSecret": "whsec_219ca8c37df86d6d5ff010ce4e717bf6493b4a3f2b2b171fd4e2ee6371641ced"
-  },
-  "gmail": {
-    "client_secret":  "test",
-    "client_id":  "test",
-    "redirect_uris": "test"
   }
 }

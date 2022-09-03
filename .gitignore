@@ -1,3 +1,5 @@
 /.idea
 /node_modules
 /stripe
+google.credentials.json
+google.token.json

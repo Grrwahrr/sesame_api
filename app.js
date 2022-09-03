@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const config = require('./config.json');
 const stripe = require("stripe")(config.stripe.secretKey);
 const {completePurchase, testSendMail} = require("./functions");
+const {connectGoogle} = require("./google");
 
 const app = express();
 
@@ -39,6 +40,13 @@ app.get('/', (req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ result: "TODO" }));
+});
+
+app.get('/connectGoogle', (req, res) => {
+    connectGoogle().then(r => {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ result: "OK" }));
+    });
 });
 
 app.post('/stripeCheckoutSession', async (req, res) => {

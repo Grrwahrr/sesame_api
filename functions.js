@@ -1,9 +1,10 @@
+const fs = require("fs");
+const crypto = require("crypto");
 const qrCode = require("qrcode");
 const pdf = require("pdf-creator-node");
-const fs = require("fs");
 const config = require("./config.json");
-const {google} = require("googleapis");
-const crypto = require("crypto");
+
+const {sendEmail} = require("./google");
 
 const createQrCode = async (ticketData) => {
     let encoded = Buffer.from(JSON.stringify(
@@ -69,35 +70,29 @@ const createTicketAndSendByMail = async (ticketData) => {
     // DEBUG store pdf
     fs.writeFileSync("output.pdf", pdf, "utf8");
 
-    // Send mail, GMAIL API
-    const { client_secret, client_id, redirect_uris } = config.gmail;
-    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-
-    const url = oAuth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: ['https://www.googleapis.com/auth/gmail.send'],
-    });
-
-    // TODO https://www.labnol.org/google-api-service-account-220405
+    // Send the
+    await sendEmail("durgus@pm.me", "Ticket for the UFFB Event", "Your ticket is attached", "<strong>Your ticket is attached!</strong>", "ticket.pdf", pdf);
 
     return {success: true};
 }
 
-const logCustomerPurchase = async (paymentDetails, ticketData) => {
-    // Log payment details, SHEETS API
-    // https://developers.google.com/sheets/api/quickstart/nodejs
+// Log payment details using SHEETS API
+const logCustomerPurchase = async (payId, payIntent, email, name, seatId, seatName, seed) => {
+    // Current time
+    const dateTime = new Date().toISOString();
 
-    let url = "POST https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1!A1:E1:append?valueInputOption=USER_ENTERED";
+
+    let url = "POST https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId/values/Sheet1!A1:I1:append?valueInputOption=USER_ENTERED";
     let callData = {
-        "range": "Sheet1!A1:E1",
+        "range": "Sheet1!A1:I1",
         "majorDimension": "ROWS",
         "values": [
-            ["Door", "$15", "2", "3/15/2016"],
+            [dateTime, payId, payIntent, email, name, seatId, seatName, seed],
         ],
     };
 
     // TODO
+    // https://developers.google.com/sheets/api/quickstart/nodejs
 }
 
 const issueOnChainTicket = (ticketData) => {
@@ -151,7 +146,7 @@ const completePurchase = async (src, paymentDetails) => {
     ticketData = issueOnChainTicket(ticketData);
 
     // Log payment details
-    await logCustomerPurchase(paymentDetails, ticketData);
+    await logCustomerPurchase(paymentDetails.id, paymentDetails.payment_intent, ticketData.email, ticketData.name, ticketData.seatId, ticketData.seatName, ticketData.seed);
 
     // Mail ticket to customer
     await createTicketAndSendByMail(ticketData);

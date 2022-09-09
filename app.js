@@ -58,7 +58,7 @@ app.post('/stripeCheckoutSession', async (req, res) => {
                 quantity: 1
             },
         ],
-        metadata: {"seatName": "na"},
+        metadata: {"seatName": ""},//TODO. set this from where
         mode: 'payment',
         success_url: config.stripe.urlSuccess,
         cancel_url: config.stripe.urlError,

@@ -33,5 +33,39 @@
     "urlError": "http://127.0.0.1:3002/testError",
     "secretKey": "sk_test_51LbMTyFItYEyplx1HJpD353DXg1sdSHkQufVSa3RnYn9CXTjrxHhFi8ffdke556eS5nNgeube2tSyRPj0NuCasCE00y4GOYMV3",
     "endpointSecret": "whsec_219ca8c37df86d6d5ff010ce4e717bf6493b4a3f2b2b171fd4e2ee6371641ced"
-  }
+  },
+  "configItemsTest": [
+    {
+      "pubKey": "HMom7wcErvD7kpu7F8zmdMHCH8V1zjVMXR4mosDvEhFH",
+      "ticketIssuerSecretKey": "4M7tZRcmMX2mZunTGuV",
+      "ticketDeleterSecretKey": "4M7tZRcmMX2mZunTGuB",
+      "ticketPdf": {
+        "template": "/template/event1/ticket.html",
+        "labelTitle": "EVENT",
+        "labelLocation": "Location",
+        "labelDateTime": "Date and Time",
+        "title": "UFFB After Party",
+        "location": "Tresor Berlin",
+        "dateTime": "19.09.2022 20:00"
+      },
+      "mail": {
+        "templateText": "/template/event1/mail.txt",
+        "templateHtml": "/template/event1/mail.html",
+        "subject": "Ticket for the UFFB Event",
+        "attachmentTitle": "ticket.pdf"
+      },
+      "salesLog": {
+        "sheetId": "1xAqBHJ_zGPucKUS9Kwm_5KD30faHHPBLbFSUbweCtX0",
+        "sheetRange": "Sheet1!A1:J1"
+      },
+      "stripe": {
+        "productName": "UFFB Ticket",
+        "productPrice": 1000,
+        "urlSuccess": "http://127.0.0.1:3002/testSuccess",
+        "urlError": "http://127.0.0.1:3002/testError",
+        "secretKey": "sk_test_51LbMTyFItYEyplx1HJpD353DXg1sdSHkQufVSa3RnYn9CXTjrxHhFi8ffdke556eS5nNgeube2tSyRPj0NuCasCE00y4GOYMV3",
+        "endpointSecret": "whsec_219ca8c37df86d6d5ff010ce4e717bf6493b4a3f2b2b171fd4e2ee6371641ced"
+      }
+    }
+  ]
 }

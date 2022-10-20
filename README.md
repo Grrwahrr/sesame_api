@@ -3,10 +3,11 @@
 
 ## TODO
 
-Issue ticket on chain
+Move HTML Mail template to html file
 
 This should work for multiple parallel events
 - LATER
+- Need config and templates to be ID associated and pass around which one a payment refers to
 
 Need NFT minting functionality for users
 - LATER
@@ -78,18 +79,14 @@ Run:
 `node app`
 
 
-Stripe webhook
+# Stripe
 https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local
+https://stripe.com/docs/api/products/object
+https://dashboard.stripe.com/settings/branding
 https://stripe.com/docs/stripe-cli
 
+```bash
 ./stripe login
 
 ./stripe listen --forward-to localhost:3001/stripeCallback
-
----
-Stripe payment / item  data
-https://stripe.com/docs/api/products/object
-
----
-Stripe branding
-https://dashboard.stripe.com/settings/branding
+```

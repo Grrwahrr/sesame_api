@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require("fs");
 const bodyParser = require('body-parser');
 const config = require('./config.json');
 const stripe = require("stripe")(config.stripe.secretKey);
@@ -21,20 +23,12 @@ app.get('/testSuccess', async (req, res) => {
 });
 /* TEST FUNCTIONALITY FOR SANDBOX */
 
-// Testing Handler
-app.get('/', (req, res) => {
-    // testSomething(sampleData);
-    testChainSomething();
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ testSendMail: "Some JSON" }));
-});
-/* TEST FUNCTIONALITY FOR SANDBOX */
-
 
 /**
  * Set up the google.token.json - requires the google.credentials.json file
  */
 app.get('/connectGoogle', (req, res) => {
+    //TODO only if the google.token.json file doesn't exist
     connectGoogle().then(r => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ result: "OK" }));
@@ -45,6 +39,11 @@ app.get('/connectGoogle', (req, res) => {
  * Creates a stripe check out session
  */
 app.post('/stripeCheckoutSession', async (req, res) => {
+    // Two params are set from the client: What ticket to buy and the seatId
+    console.log("POST itemId: ", req.body.itemId);
+    console.log("POST seatName: ", req.body.seatName);
+    //TODO not currently supporting named seats - need to verify seat availability against a database
+
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
@@ -58,7 +57,7 @@ app.post('/stripeCheckoutSession', async (req, res) => {
                 quantity: 1
             },
         ],
-        metadata: {"seatName": ""},//TODO. set this from where
+        metadata: {"seatName": ""},//TODO add named seating; add some ID for what ticket is being sold; multi config
         mode: 'payment',
         success_url: config.stripe.urlSuccess,
         cancel_url: config.stripe.urlError,
@@ -115,7 +114,7 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
             break;
         }
         case 'checkout.session.async_payment_failed': {
-            // TODO Handle this? Message some one?
+            // TODO Handle this? Message some one? Log to another google sheet?
             response.status(200);
             break;
         }
@@ -124,4 +123,16 @@ app.post('/stripeCallback', bodyParser.raw({type: 'application/json'}), (request
 
 
 // Start listening on configured port
-app.listen(config.app.port, () => console.log("Example app listening on http://"+ config.app.host + ":" + config.app.port +"/ "));
+// app.listen(config.app.port, () => console.log("Example app listening on http://"+ config.app.host + ":" + config.app.port +"/ "));
+
+const key = fs.readFileSync(__dirname + '/ssl.key');
+const cert = fs.readFileSync(__dirname + '/ssl.crt');
+
+let server = https.createServer({
+    key: key,
+    cert: cert
+}, app);
+
+server.listen(config.app.port, () => {
+    console.log("Example app listening on https://"+ config.app.host + ":" + config.app.port +"/ ");
+});
